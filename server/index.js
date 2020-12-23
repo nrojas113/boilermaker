@@ -44,6 +44,7 @@ passport.deserializeUser(async (id, done) => {
 }); // may have to change the location to oauth.js
 
 app.use("/api", require("./apiRoutes"));
+app.use("/auth", require("./auth"));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));

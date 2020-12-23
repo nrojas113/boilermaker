@@ -3,6 +3,13 @@ const db = require("./database");
 const crypto = require("crypto");
 const _ = require("lodash");
 
+const setSaltAndPassword = function (user) {
+  if (user.changed("password")) {
+    user.salt = User.generateSalt();
+    user.password = User.encryptPassword(user.password, user.salt);
+  }
+};
+
 const User = db.define(
   "users",
   {
@@ -54,13 +61,6 @@ User.encryptPassword = (plainText, salt) => {
   hash.update(plainText);
   hash.update(salt);
   return hash.difect("hex");
-};
-
-const setSaltAndPassword = (user) => {
-  if (user.changed("password")) {
-    user.salt = User.generateSalt();
-    user.password = User.encryptPassword(user.password, user.salt);
-  }
 };
 
 module.exports = User;
