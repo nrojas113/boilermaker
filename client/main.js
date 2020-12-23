@@ -1,4 +1,13 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { render } from "react-dom";
+import store from "./store";
+import { Provider } from "react-redux";
+import Routes from "./components/Routes";
+import "../public/index.css";
 
-ReactDOM.render(<div>Freya's World</div>, document.getElementById("main"));
+render(
+  <Provider store={store}>
+    <Routes />
+  </Provider>,
+  document.getElementById("main")
+);

@@ -1,5 +1,5 @@
 module.exports = {
-  entry: "./client/main",
+  entry: "./client/main.js",
   mode: "development",
   output: {
     path: __dirname,
@@ -10,10 +10,15 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
+        exclude: /(node_modules|bower_components)/,
+        loader: "babel-loader",
+        options: {
+          presets: ["react", "es2015"],
         },
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
       },
     ],
   },
