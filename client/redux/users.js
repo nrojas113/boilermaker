@@ -27,17 +27,16 @@ export const fetchMe = () => {
   };
 };
 
-export const signUp = (credentials) => {
-  return async (dispatch) => {
-    try {
-      console.log("credentials from singUp: ", credentials);
-      const { data } = await axios.post("/auth/signup", credentials);
-      dispatch(gotMe(data));
-    } catch (err) {
-      console.error(err);
-    }
-  };
-};
+// export const signUp = (credentials) => {
+//   return async (dispatch) => {
+//     try {
+//       const { data } = await axios.post("/auth/signup", credentials);
+//       dispatch(gotMe(data));
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+// };
 
 export const login = (credentials) => {
   return async (dispatch) => {

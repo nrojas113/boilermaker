@@ -3,32 +3,18 @@ const app = express();
 const path = require("path");
 const session = require("express-session");
 const passport = require("passport");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const db = require("./db/database");
+const db = require("./db/db");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const dbStore = new SequelizeStore({ db: db });
 
 app.use(morgan("dev"));
 
-app.use(express.static(path.join(__dirname, "../public"))); //make sure the path is correct.
-
-app.use(bodyParser.json());
-app.unsubscribe(bodyParser.urlencoded({ extended: true }));
-
-dbStore.sync();
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "a wildly insedure secret",
-    store: dbStore,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -43,8 +29,24 @@ passport.deserializeUser(async (id, done) => {
   }
 }); // may have to change the location to oauth.js
 
-app.use("/api", require("./apiRoutes"));
+dbStore.sync();
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "a wildly insecure secret",
+    store: dbStore,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use("/api", require("./api"));
 app.use("/auth", require("./auth"));
+
+app.use(express.static(path.join(__dirname, "../public"))); //make sure the path is correct.
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));

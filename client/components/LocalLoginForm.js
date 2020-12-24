@@ -1,6 +1,6 @@
 import React from "react";
 
-const LocalLoginForm = (props) => {
+const AuthForm = (props) => {
   console.log("props from LocalLoginForm: ", props);
   const { handleSubmit } = props;
   return (
@@ -22,4 +22,4 @@ const LocalLoginForm = (props) => {
   );
 };
 
-export default LocalLoginForm;
+export default AuthForm;

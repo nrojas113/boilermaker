@@ -1,4 +1,4 @@
-const db = require("./server/db/index");
+const db = require("./server/db/database");
 const app = require("./server/index");
 const PORT = process.env.PORT || 3000;
 
