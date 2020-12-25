@@ -34,12 +34,14 @@ router.post("/signup", async (req, res, next) => {
 
 router.put("/login", async (req, res, next) => {
   try {
+    console.log("req.body from auth.router: ", req.body); // to be deleted
     const user = await User.findOne({
       where: {
         email: req.body.email,
         password: req.body.password,
       },
     });
+    console.log("user from auth.router: ", user); // to be deleted
     if (!user) {
       res.sendStatus(401);
     } else {

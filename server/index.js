@@ -3,31 +3,21 @@ const app = express();
 const path = require("path");
 const session = require("express-session");
 const passport = require("passport");
-// const bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const db = require("./db/db");
+
+const { db, User } = require("./db");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const dbStore = new SequelizeStore({ db: db });
 
 app.use(morgan("dev"));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+// body-parser allows you to use req.body format.
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-}); // may have to change the location to oauth.js
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await user.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-}); // may have to change the location to oauth.js
+app.use(express.static(path.join(__dirname, "../public")));
+// this allows you to load static (or unchanging) files in the assigned directory (such as images).
 
 dbStore.sync();
 
@@ -42,11 +32,24 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+// these two must be called after the session is invoked.
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+// this grabs the user id to the session.
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findByPk(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+}); // this then grabs the user info from the user id under the form of 'req.user'.
 
 app.use("/api", require("./api"));
 app.use("/auth", require("./auth"));
-
-app.use(express.static(path.join(__dirname, "../public"))); //make sure the path is correct.
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
