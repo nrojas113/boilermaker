@@ -16,6 +16,9 @@ const User = db.define("users", {
   imageUrl: {
     type: Sequelize.STRING,
   },
+  googleId: {
+    type: Sequelize.STRING,
+  },
   salt: {
     type: Sequelize.STRING,
   },

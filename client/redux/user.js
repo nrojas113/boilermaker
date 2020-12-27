@@ -10,8 +10,30 @@ const gotMe = (user) => ({
 export const login = (credentials) => {
   return async (dispatch) => {
     try {
-      console.log("credentials from login: ", credentials);
       const { data } = await axios.put("/auth/login", credentials);
+      dispatch(gotMe(data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const getMe = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get("/auth/me");
+      dispatch(gotMe(data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const signup = (credentials) => {
+  return async (dispatch) => {
+    try {
+      console.log("credentials from signup: ", credentials);
+      const { data } = await axios.post("/auth/signup", credentials);
       dispatch(gotMe(data));
     } catch (error) {
       console.error(error);
@@ -33,10 +55,7 @@ export const logout = () => {
 export default function userReducer(state = {}, action) {
   switch (action.type) {
     case GET_USER:
-      return {
-        ...state,
-        user: action.user,
-      };
+      return action.user;
     default:
       return state;
   }

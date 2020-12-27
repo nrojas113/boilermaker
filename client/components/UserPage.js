@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { logout } from "../redux/user";
 
 const UserPage = (props) => {
   const { user, handleClick } = props;
@@ -27,4 +28,17 @@ const mapState = (state) => {
   };
 };
 
-export default connect(mapState)(UserPage);
+const mapDispatch = (dispatch, ownProps) => {
+  return {
+    async handleClick() {
+      try {
+        await dispatch(logout());
+        ownProps.history.push("/");
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  };
+};
+
+export default connect(mapState, mapDispatch)(UserPage);

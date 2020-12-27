@@ -1,15 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
-import { login } from "../redux/user";
+import { signup } from "../redux/user";
 import AuthForm from "./AuthForm";
 import OauthLoginForm from "./OauthLoginForm";
 
-const Login = (props) => {
-  // console.log("props from Login: ", props);
+const Signup = (props) => {
+  console.log("props from Signup: ", props);
   const { handleSubmit } = props;
   return (
     <div>
-      Freya's world from Login
+      Freya's world from Signup
       <AuthForm handleSubmit={handleSubmit} />
       <OauthLoginForm />
     </div>
@@ -21,12 +21,12 @@ const mapDispatch = (dispatch, ownProps) => {
     async handleSubmit(evt) {
       try {
         evt.preventDefault();
-        const thunk = login({
+        const thunk = signup({
           email: evt.target.email.value,
           password: evt.target.password.value,
         });
         await dispatch(thunk);
-        ownProps.history.push("/home");
+        // ownProps.history.push("/home");
       } catch (err) {
         console.log(err);
       }
@@ -34,4 +34,4 @@ const mapDispatch = (dispatch, ownProps) => {
   };
 };
 
-export default connect(null, mapDispatch)(Login);
+export default connect(null, mapDispatch)(Signup);
