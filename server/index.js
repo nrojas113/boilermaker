@@ -13,9 +13,9 @@ const port = process.env.PORT || 3000;
 module.exports = app;
 
 console.log("before require: ", process.env.TEST_VARIABLE);
-// if (process.env.NODE_ENV === "development") {
-require("../secrets");
-// }
+if (process.env.NODE_ENV !== "production") {
+  require("../secrets");
+}
 console.log("after require: ", process.env.TEST_VARIABLE);
 
 passport.serializeUser((user, done) => {
